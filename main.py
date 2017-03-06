@@ -13,9 +13,20 @@ else:
 
 frame = Frame()
 frame.ReadFrame(frame_img)
+'''
 pixels=[]
-for i in range(0,500):
-    pixels.append([0,0+i])
-frame.DrawInImage(pixels)
-frame.save()
+for i in range(0,200):
+    pixels.append([300,0+i])
+frame.DrawInImage(pixels,10)
+'''
+#frame.save()
+pixels = frame.GetPuzzleCircles()
+pixels_a = []
+for i in pixels:
+	for j in i:
+		pixels_a.append(j)
+		#print str(j[0])+" ,"+str(j[1])
 
+print str(len(pixels_a))
+frame.DrawInImage(pixels_a,1)
+frame.save()
