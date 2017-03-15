@@ -5,6 +5,7 @@ from img import *
 from frame import *
 from circle import *
 import sys
+import time
 
 if len(sys.argv) >= 2:
 	frame_img = sys.argv[1]
@@ -17,7 +18,9 @@ frame.ReadFrame(frame_img, 70)
 pixels = frame.GetPuzzleCircles()
 circleParams = frame.GetFrameInfo()
 circles = Circles(pixels, circleParams[0],circleParams[1])
+time1 = time.time()
 circles.GetFigures()
+print("--- %s seconds ---" % (time.time() - time1))
 centres = circles.Circles
 print "Hi han "+str(centres)
 frame.DrawInImage(centres,5)
