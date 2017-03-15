@@ -3,16 +3,21 @@
 
 # Library imports
 from img import *
-from PIL import Image
+from PIL import Image, ImageFilter
 import time
 
 
 class Frame(object):
     def __init__(self):
         self.PixelMap = []
+        self.Edge =[]
 
-    def ReadFrame(self, FileName):
+
+    def GetFrameInfo(self):
+        return [len(self.PixelMap),len(self.PixelMap[0])]
+    def ReadFrame(self, FileName, thresh):
         image = Image.open(FileName)
+        image = image.point(lambda i: 255 if i > thresh else 0)
         pix = image.load()
         X, Y = image.size[0], image.size[1]
         data = [[pix[x,y] for x in range(X)] for y in range(Y)] 
@@ -37,51 +42,66 @@ class Frame(object):
         return 0
 
     def WitchColorPixel(self, Pixel):
-        if((Pixel[0]>100)&(Pixel[1]>100)&(Pixel[2]>100)):
-            #print "White"
-            return 0
-        elif((Pixel[0]<60)&(Pixel[1]<60)&(Pixel[2]<60)):
-            #print "Black"
+        if((Pixel[0]<60)&(Pixel[1]<60)&(Pixel[2]<60)):
+           #print "Black"
             return 1
         else:
-            #print "Other"
-            return 2
+             #print "White"
+            return 0
+                              
 
     def GetPuzzleCircles(self):
-        State = 0
+        State = 1
         BlackPuzzle = []
-        BlackPiece = []
         for x in range(len(self.PixelMap)):
             for y in range(len(self.PixelMap[x])):
                 Pixel = self.PixelMap[x][y]
                 colour = self.WitchColorPixel(Pixel)
-                if State == 0:
+                if State == 1:
                     if (colour == 0):       #White
                         State = 1
-                    elif(colour == 1):      #Black
-                        State = 0
-                    else:                   #Other
-                        State = 1
-                elif State == 1:
-                    if (colour == 0):       #White
-                        State = 1
-                    elif(colour == 1):      #Black
+                    else:                   #Black
                         State = 2
-                    else:                   #Other
-                        State = 1
                 else:
                     if (colour == 0):      #White
                         State = 1
-                        BlackPuzzle.append(BlackPiece)
-                        BlackPiece = []
-                    elif(colour == 1):      #Black
+                    else:      #Black
                         State = 2
-                        BlackPiece.append([x,y])
-                    else:                   #Other
-                        State = 0
-                        BlackPuzzle.append(BlackPiece)
-                        BlackPiece = []
-
-            
-
+                        BlackPuzzle.append([x,y])
         return BlackPuzzle
+
+    def saveEdge(self):
+        i = img(self.Edge,'RGB')
+        image = Image.new(format(i),(get_w(i),get_h(i)))
+        image.putdata([pixel for F in matrix(i) for pixel in F])
+        fn = "./Img_test/%i.jpg" % int(time.time())
+        image.save(fn)
+    def DrawInImageEdge(self,ArrayPixels,thickness):
+        for pixel in ArrayPixels:
+            if(thickness == 1):
+                self.Edge[pixel[0]][pixel[1]] = (0,255,0)
+            else:
+                for i in range(0, thickness):
+                    self.Edge[pixel[0]+i][pixel[1]] = (0,255,0) 
+
+        return 0
+    def GetWhiteEdges(self):
+        White = []
+        i = 0
+        for x in range(len(self.Edge)):
+            for y in range(len(self.Edge[x])):
+                Pixel = self.Edge[x][y]
+                if((Pixel[0]>240)&(Pixel[1]>240)&(Pixel[2]>240)):
+                    i= i+1
+                    White.append(Pixel)
+        print str(i)
+        return White
+    def FindEdges(self, FileName):
+        image = Image.open(FileName)
+        image = image.filter(ImageFilter.FIND_EDGES)
+        thresh = 100 # Change at your discretion
+        image = image.point(lambda i: 255 if i > thresh else 0)
+        pix = image.load()
+        X, Y = image.size[0], image.size[1]
+        data = [[pix[x,y] for x in range(X)] for y in range(Y)] 
+        self.Edge= data  
