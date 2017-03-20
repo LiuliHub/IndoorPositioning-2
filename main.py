@@ -21,7 +21,7 @@ circles = Circles(pixels, circleParams[0],circleParams[1])
 time1 = time.time()
 circles.GetFigures()
 print("--- %s seconds ---" % (time.time() - time1))
-centres = circles.Circles
+centres = circles.GetCenters()
 print "Hi han "+str(centres)
 frame.DrawInImage(centres,5)
 frame.save()

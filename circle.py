@@ -2,14 +2,13 @@
 # -*- coding: utf-8 -*-
 
 # Library imports
-from img import *
 from random import randrange
-
+import time
 
 #Class Circles
 class Circles(object):
     def __init__(self, PixelPuzzle, X_Pixels, Y_Pixels):
-        self.Circles = []
+        self.CirclesCenters = []
         self.X_Pixels = X_Pixels
         self.Y_Pixels = Y_Pixels
         self.PixelPuzzle = PixelPuzzle
@@ -17,10 +16,11 @@ class Circles(object):
     def GetFigures(self):
         NewCircle = True
         # keep looking till you find 4 bloobs
-        while (len(self.Circles) < 4):
+        while (len(self.CirclesCenters) < 4):
             if(NewCircle):
                 #If it's the first time we track a new circle we will pick a random point
                 Point =  self.PixelPuzzle[randrange(len(self.PixelPuzzle))]
+                time1 = time.time()                    
             else:
                 #If we didn't find the center the first time we will try to find it 
                 #again now with the reference of the provious fake center
@@ -34,10 +34,13 @@ class Circles(object):
             if(self.IsValidCenter(center, Point)):
                 NewCircle = True
                 if(self.IsAlreadyACenter(center)):
-                    self.Circles.append(center)
+                    self.CirclesCenters.append(center)
+                    print("--- %s seconds ---" % (time.time() - time1)) 
+                    print "Hi han "+str(center)
+                    #time1 = time.time()            
+                                                            
             else:
-                NewCircle = False                
-                
+                NewCircle = False                   
     def FindXTop(self, Point):
         YPositionPixel = Point[1]
         XPositionPixel = Point[0]
@@ -74,13 +77,13 @@ class Circles(object):
     def IsValidCenter(self, center, point):
         XDifference = abs(point[0] - center[0])
         YDifference = abs(point[1] - center[1])
-        if (((XDifference+YDifference)/2) < 6):
+        if (((XDifference+YDifference)/2) < 2):
             return True
         return False
 
     def IsAlreadyACenter(self, center):
         ValidCenter = True                
-        for i in self.Circles:
+        for i in self.CirclesCenters:
             XDifference = abs(i[0] - center[0])
             YDifference = abs(i[1] - center[1])
             if (((XDifference+YDifference)/2) < 50):
@@ -88,7 +91,5 @@ class Circles(object):
                 return ValidCenter
         return ValidCenter
 
-    def GetCircles(self,PixelPuzzle ):  
-        return 0  
-    def GetCenter(self):
-        return 0
+    def GetCenters(self):
+        return self.CirclesCenters
