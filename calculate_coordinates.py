@@ -9,7 +9,7 @@ class Enviroment3d(object):
     def __init__(self,s12,s13,s14,s23,s24,s34):
         self.CameraCenter = np.array([[1],[1],[10]])
         self.RotationMatrix = np.array([[-1, 0, 0],[0, 1, 0],[0, 0, -1]])
-        self.Focal = 0.36000
+        self.Focal = 13
         self.s12 = s12
         self.s13 = s13
         self.s14 = s14
@@ -17,6 +17,10 @@ class Enviroment3d(object):
         self.s24 = s24
         self.s34 = s34
         self.points = []
+        self.d1
+        self.d2
+        self.d3
+        self.d4
 
     def AddPointsPicture(self,x,y):
         self.points.append([x,y])
@@ -30,6 +34,25 @@ class Enviroment3d(object):
         Vc = np.array([[x],[y],[z]])
         Qc = Vc*1.0*self.Focal/(Vc[2])
         return Qc
+
+    # Find distances
+    def d1(self):
+        self.d1 = np.sqrt((self.s12)**2.0 * (self.Fi(1))**2.0 / (self.H12_2() + (self.Focal**2.0)*(1 - self.C12())**2.0))
+        #d12 = np.sqrt((self.s13)**2.0 * (self.Fi(1))**2.0 / (self.H13_2() + (self.Focal**2.0)*(1 - self.C13())**2.0))
+        return self.d1
+    def d2(self):
+        self.d2 = self.C12()*self.Fi(2)*self.d1/self.Fi(1)
+        return self.d2
+    def d3(self):
+        self.d3 = self.C13()*self.Fi(3)*self.d1/self.Fi(1)
+        return self.d3
+    def d4(self):
+        self.d4 = self.C14()*self.Fi(4)*self.d1/self.Fi(1)
+        return self.d4
+        
+    def FindF(self):
+        return np.sqrt((self.s14**2.0 * self.H12_2() - self.s12**2.0 * self.H14_2()) / (self.s12**2.0 * (1 - self.C14())**2.0 - self.s14**2.0 * (1 - self.C12())**2.0))
+
     # Function return every x,y from every point 
     def x1(self):
         return self.points[0][0]
@@ -50,6 +73,7 @@ class Enviroment3d(object):
     
     # Functions to make the algorithm
 
+    ## Bi: Twice the area of the tirangles formed by the image points
     def B1(self):
         #B1 = x1(y3 - y2) + y1 (x2 - x3) + y2*x3 - x2*y3
         return self.x1()*(self.y3()-self.y2()) + self.y1()*(self.x2()-self.x3()) + self.y2()*self.x3() - self.x2()*self.y3()
@@ -62,15 +86,63 @@ class Enviroment3d(object):
     def B4(self):
         #B4 = x2(y4 - y3) + y2 (x3 - x4) + y3*x4 - x3*y4
         return self.x2()*(self.y4()-self.y3()) + self.y2()*(self.x3()-self.x4()) + self.y3()*self.x4() - self.x3()*self.y4()
+    
+    ## Ai: Area of the four differents triangles 
     def A1(self):
         #Area Triangle P1P2P3
-        return ((self.s12**2 + self.s13**2 + self.s23**2)**2 -2*(self.s12**4 + self.s13**4 + self.s23**4))**(1/2)/4.0
+        return ((self.s12**2.0 + self.s13**2.0 + self.s23**2.0)**2.0 -2*(self.s12**4.0 + self.s13**4.0 + self.s23**4.0))**(0.5)/4.0
     def A2(self):
         #Area Triangle P1P2P4
-        return ((self.s12**2 + self.s14**2 + self.s24**2)**2 -2*(self.s12**4 + self.s14**4 + self.s24**4))**(1/2)/4.0
+        return ((self.s12**2.0 + self.s14**2.0 + self.s24**2.0)**2.0 -2*(self.s12**4.0 + self.s14**4.0 + self.s24**4.0))**(0.5)/4.0
     def A3(self):
         #Area Triangle P1P3P4
-        return ((self.s13**2 + self.s14**2 + self.s34**2)**2 -2*(self.s13**4 + self.s14**4 + self.s34**4))**(1/2)/4.0
+        return ((self.s13**2.0 + self.s14**2.0 + self.s34**2.0)**2.0 -2*(self.s13**4.0 + self.s14**4.0 + self.s34**4.0))**(0.5)/4.0
     def A4(self):
         #Area Triangle P2P3P4
-        return ((self.s23**2 + self.s24**2 + self.s34**2)**2 -2*(self.s23**4 + self.s24**4 + self.s34**4))**(1/2)/4.0
+        return ((self.s23**2.0 + self.s24**2.0 + self.s34**2.0)**2.0 -2*(self.s23**4.0 + self.s24**4.0 + self.s34**4.0))**(0.5)/4.0
+
+    ## Cij: Untiless variable used to calculate relationship between the center of projection and the target
+    def C12(self):
+        return (self.B3()*self.A4())/(self.A3()*self.B4())
+    def C13(self):
+        return (self.B2()*self.A4())/(self.A2()*self.B4())
+    def C14(self):
+        return (self.B1()*self.A4())/(self.A1()*self.B4())
+    def C23(self):
+        return (self.B2()*self.A3())/(self.A2()*self.B3())
+    def C24(self):
+        return (self.B1()*self.A3())/(self.A1()*self.B3())
+    def C34(self):
+        return (self.B1()*self.A2())/(self.A1()*self.B2())
+
+    ## Hij: Unit variable used to calculate the effective focal length
+
+    def H12_2(self):
+        return (self.x1() - self.C12()*self.x2())**2.0 + (self.y1() - self.C12()*self.y2())**2.0 
+    def H13_2(self):
+        return (self.x1() - self.C13()*self.x3())**2.0 + (self.y1() - self.C13()*self.y3())**2.0        
+    def H14_2(self):
+        return (self.x1() - self.C14()*self.x4())**2.0 + (self.y1() - self.C14()*self.y4())**2.0        
+    def H23_2(self):
+        return (self.x2() - self.C23()*self.x3())**2.0 + (self.y2() - self.C23()*self.y3())**2.0
+    def H24_2(self):
+        return (self.x2() - self.C24()*self.x4())**2.0 + (self.y2() - self.C24()*self.y4())**2.0
+    def H34_2(self):
+        return (self.x3() - self.C34()*self.x4())**2.0 + (self.y3() - self.C34()*self.y4())**2.0
+
+
+
+    ## Fi: Magnitude of the vector Qi 
+    def Fi(self, point):
+        if (point == 1):
+            return np.sqrt(self.x1()**2.0 + self.y1()**2.0 + self.Focal**2.0)
+        elif (point == 2):
+            return np.sqrt(self.x2()**2.0 + self.y2()**2.0 + self.Focal**2.0)
+        elif (point == 3):
+            return np.sqrt(self.x3()**2.0 + self.y3()**2.0 + self.Focal**2.0)
+        elif (point == 4):
+            return np.sqrt(self.x4()**2.0 + self.y4()**2.0 + self.Focal**2.0)
+        
+
+
+   
