@@ -7,9 +7,10 @@ import numpy as np
 class Enviroment3d(object):
 
     def __init__(self,s12,s13,s14,s23,s24,s34):
-        self.CameraCenter = np.array([[1],[1],[10]])
+        self.CameraCenterPrint = [75,75,600]
+        self.CameraCenter = np.array([[75],[75],[600]])
         self.RotationMatrix = np.array([[-1, 0, 0],[0, 1, 0],[0, 0, -1]])
-        self.Focal = 13
+        self.Focal = 3.60
         self.s12 = s12
         self.s13 = s13
         self.s14 = s14
@@ -25,14 +26,15 @@ class Enviroment3d(object):
     def AddPointsPicture(self,x,y):
         self.points.append([x,y])
 
-    def World2Camera(self,x,y,z):
-        v = np.array([[x],[y],[z]])
+    def World2Camera(self,Pi):
+        v = np.array([[Pi[0]],[Pi[1]],[Pi[2]]])
         Vc = (self.RotationMatrix).dot(v-self.CameraCenter)
         return Vc
 
-    def Camera2Picture(self,x,y,z):
-        Vc = np.array([[x],[y],[z]])
-        Qc = Vc*1.0*self.Focal/(Vc[2])
+    def Camera2Picture(self, Pic):
+        Vc = np.array([[Pic[0]],[Pic[1]],[Pic[2]]])
+        Qc = Vc*(self.Focal/(Vc[2]))
+        Qc[2] = Qc[2]*(-1)
         return Qc
 
     # Find distances
@@ -51,7 +53,7 @@ class Enviroment3d(object):
         return self.d4
         
     def FindF(self):
-        return np.sqrt((self.s14**2.0 * self.H12_2() - self.s12**2.0 * self.H14_2()) / (self.s12**2.0 * (1 - self.C14())**2.0 - self.s14**2.0 * (1 - self.C12())**2.0))
+        return np.sqrt((self.s13**2.0 * self.H12_2() - self.s12**2.0 * self.H13_2()) / (self.s12**2.0 * (1 - self.C13())**2.0 - self.s13**2.0 * (1 - self.C12())**2.0))
 
     # Function return every x,y from every point 
     def x1(self):
@@ -82,10 +84,10 @@ class Enviroment3d(object):
         return self.x1()*(self.y4()-self.y2()) + self.y1()*(self.x2()-self.x4()) + self.y2()*self.x4() - self.x2()*self.y4()
     def B3(self):
         #B3 = x1(y4 - y3) + y1 (x3 - x4) + y3*x4 - x3*y4
-        return self.x1()*(self.y4()-self.y3()) + self.y1()*(self.x3()-self.x4()) + self.y3()*self.x4() - self.x3()*self.y4()
+        return (self.x1()*(self.y4()-self.y3()) + self.y1()*(self.x3()-self.x4()) + self.y3()*self.x4() - self.x3()*self.y4())
     def B4(self):
         #B4 = x2(y4 - y3) + y2 (x3 - x4) + y3*x4 - x3*y4
-        return self.x2()*(self.y4()-self.y3()) + self.y2()*(self.x3()-self.x4()) + self.y3()*self.x4() - self.x3()*self.y4()
+        return (self.x2()*(self.y4()-self.y3()) + self.y2()*(self.x3()-self.x4()) + self.y3()*self.x4() - self.x3()*self.y4())
     
     ## Ai: Area of the four differents triangles 
     def A1(self):
