@@ -21,8 +21,13 @@ Ry=np.array([[np.cos(thy), 0, np.sin(thy)],
              [0, 1, 0],
              [-np.sin(thy), 0, np.cos(thy)]])
 
+#Arbitrary rotation on z axis
+thz=90*d2r
+Rz=np.array([[np.cos(thz), -np.sin(thz), 0],
+             [np.sin(thz),  np.cos(thz), 0],
+             [0, 0, 1]])
+R=Rz.dot(Ry.dot(Rx))
 
-R=Ry.dot(Rx)
 # v-c :final vector minus initial vector)
 #      This is the point seen from the camera coordinates
 # without rotation
