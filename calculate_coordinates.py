@@ -4,12 +4,13 @@
 # Library imports
 import numpy as np
 
+
 class Enviroment3d(object):
 
     def __init__(self,s12,s13,s14,s23,s24,s34):
         self.CameraCenterPrint = [75,75,600]
         self.CameraCenter = np.array([[75],[75],[600]])
-        self.RotationMatrix = np.array([[-1, 0, 0],[0, 1, 0],[0, 0, -1]])
+        self.RotationMatrix = []
         self.Focal = 3.60
         self.s12 = s12
         self.s13 = s13
@@ -22,6 +23,17 @@ class Enviroment3d(object):
         self.d2
         self.d3
         self.d4
+    def GetRotationMatrix(self,x,y,z):
+        d2r=np.pi/180
+        thx=x*d2r
+        thy=y*d2r 
+        Rx=np.array([[1, 0, 0],
+             [0, np.cos(thx), -np.sin(thx)],
+             [0, np.sin(thx),  np.cos(thx)]]) 
+        Ry=np.array([[np.cos(thy), 0, np.sin(thy)],
+             [0, 1, 0],
+             [-np.sin(thy), 0, np.cos(thy)]])
+        self.RotationMatrix = np.linalg.inv(Ry.dot(Rx))
 
     def AddPointsPicture(self,x,y):
         self.points.append([x,y])
@@ -34,7 +46,7 @@ class Enviroment3d(object):
     def Camera2Picture(self, Pic):
         Vc = np.array([[Pic[0]],[Pic[1]],[Pic[2]]])
         Qc = Vc*(self.Focal/(Vc[2]))
-        Qc[2] = Qc[2]*(-1)
+        Qc = Qc*(-1)
         return Qc
 
     # Find distances
