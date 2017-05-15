@@ -33,7 +33,13 @@ class Frame(object):
         i = img(self.OriginalMap,'RGB')
         image = Image.new(format(i),(get_w(i),get_h(i)))
         image.putdata([pixel for F in matrix(i) for pixel in F])
-        fn = "./Img_test/%i.jpg" % int(time.time())
+        fn = "./Img/%i.jpg" % int(time.time())
+        image.save(fn)
+    def save_th(self):
+        i = img(self.PixelMap,'RGB')
+        image = Image.new(format(i),(get_w(i),get_h(i)))
+        image.putdata([pixel for F in matrix(i) for pixel in F])
+        fn = "./Img/%i.jpg" % int(time.time())
         image.save(fn)
 
     def DrawInImage(self,ArrayPixels,thickness):
@@ -64,7 +70,7 @@ class Frame(object):
                     #Check if pixel already in a circle existing
                     if (self.NotIn([x,y])):
                         self.SearchCircleInfo([x,y],[])
-                        if(len(self.Centers) == 4):
+                        if(len(self.Centers) == 5):
                             return 0
 
         return 0
@@ -132,7 +138,9 @@ class Frame(object):
         return False
     def NotIn(self, Point):
         for Circle in self.CirclesInfo:
-            if ((Circle[0][0] < Point[0])&(Circle[1][0] > Point[0])&(Circle[3][1] < Point[1])&(Circle[2][1] > Point[1])):
+            thx = (Circle[1][0]-Circle[0][0])*0.25
+            thy = (Circle[2][1]-Circle[3][1])*0.25
+            if ((Circle[0][0] - thx  < Point[0])&(Circle[1][0] + thx > Point[0])&(Circle[3][1] - thy < Point[1])&(Circle[2][1] + thy > Point[1])):
                 return False
         return True
 
@@ -140,7 +148,7 @@ class Frame(object):
         for i in range(len(self.Centers)):
             XDifference = abs(self.Centers[i][0] - center[0])
             YDifference = abs(self.Centers[i][1] - center[1])
-            if (((XDifference+YDifference)/2) < 20):
+            if (((XDifference+YDifference)/2) < 10):
                 self.Centers[i] = self.GetMiddlePoint(self.Centers[i], center)
                 if self.CirclesInfo[i][0][0] > Info[0][0]:
                     self.CirclesInfo[i][0] = Info[0]

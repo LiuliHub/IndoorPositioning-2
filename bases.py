@@ -16,7 +16,7 @@ Rx=np.array([[1, 0, 0],
              [0, np.sin(thx),  np.cos(thx)]])
 
 #Arbitrary rotation on y axis
-thx=90*d2rthy=0*d2r
+thy=0*d2r
 Ry=np.array([[np.cos(thy), 0, np.sin(thy)],
              [0, 1, 0],
              [-np.sin(thy), 0, np.cos(thy)]])

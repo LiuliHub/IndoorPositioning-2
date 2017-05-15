@@ -10,6 +10,10 @@ class Enviroment3d(object):
     def __init__(self,s12,s13,s14,s23,s24,s34):
         self.CameraCenterPrint = [75,75,600]
         self.CameraCenter = np.array([[75],[75],[600]])
+        self.HeightPixels = 920
+        self.WidthPixels = 1280
+        self.Pixel2mmX = (self.HeightPixels * 1.4*10**(-3))/1944
+        self.Pixel2mmY = (self.WidthPixels * 1.4*10**(-3))/2592        
         self.RotationMatrix = []
         self.Focal = 3.60
         self.s12 = s12
@@ -23,17 +27,24 @@ class Enviroment3d(object):
         self.d2
         self.d3
         self.d4
+
+    #Functions to test the algorith with theoretical points
     def GetRotationMatrix(self,x,y,z):
         d2r=np.pi/180
         thx=x*d2r
         thy=y*d2r 
+        thz=z*d2r
         Rx=np.array([[1, 0, 0],
              [0, np.cos(thx), -np.sin(thx)],
              [0, np.sin(thx),  np.cos(thx)]]) 
         Ry=np.array([[np.cos(thy), 0, np.sin(thy)],
              [0, 1, 0],
              [-np.sin(thy), 0, np.cos(thy)]])
-        self.RotationMatrix = np.linalg.inv(Ry.dot(Rx))
+        Rz=np.array([[np.cos(thz), -np.sin(thz), 0],
+             [np.sin(thz),  np.cos(thz), 0],
+             [0, 0, 1]])
+        R = Rz.dot(Ry.dot(Rx))
+        self.RotationMatrix = np.linalg.inv(R)
 
     def AddPointsPicture(self,x,y):
         self.points.append([x,y])
@@ -48,6 +59,18 @@ class Enviroment3d(object):
         Qc = Vc*(self.Focal/(Vc[2]))
         Qc = Qc*(-1)
         return Qc
+
+
+    #Functions to test the algorithm with real data
+    def Pixel2Camera(self, Points):
+        result = []
+        for point in Points:
+             result.append([((self.HeightPixels/2) - point[0])*self.Pixel2mmX,(point[1]- (self.WidthPixels/2))*self.Pixel2mmY])
+        return result
+    
+    def AddPointsTest(self,result):
+        for point in result:
+            self.AddPointsPicture(point[0],point[1])
 
     # Find distances
     def d1(self):
