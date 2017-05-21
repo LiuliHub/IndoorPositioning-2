@@ -10,10 +10,10 @@ class Enviroment3d(object):
     def __init__(self,s12,s13,s14,s23,s24,s34):
         self.CameraCenterPrint = [75,75,600]
         self.CameraCenter = np.array([[75],[75],[600]])
-        self.HeightPixels = 920
+        self.HeightPixels = 960
         self.WidthPixels = 1280
-        self.Pixel2mmX = (self.HeightPixels * 1.4*10**(-3))/1944
-        self.Pixel2mmY = (self.WidthPixels * 1.4*10**(-3))/2592        
+        self.Pixel2mmX = ( 1944 * 1.4*10**(-3))/self.HeightPixels
+        self.Pixel2mmY = ( 2592 * 1.4*10**(-3))/self.WidthPixels        
         self.RotationMatrix = []
         self.Focal = 3.60
         self.s12 = s12
@@ -66,6 +66,7 @@ class Enviroment3d(object):
         result = []
         for point in Points:
              result.append([((self.HeightPixels/2) - point[0])*self.Pixel2mmX,(point[1]- (self.WidthPixels/2))*self.Pixel2mmY])
+        print result
         return result
     
     def AddPointsTest(self,result):

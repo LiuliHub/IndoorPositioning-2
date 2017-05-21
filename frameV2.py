@@ -5,6 +5,7 @@
 from img import *
 from PIL import Image, ImageFilter
 import time
+from numpy import *
 
 
 class Frame(object):
@@ -161,3 +162,104 @@ class Frame(object):
                 return 0
         self.Centers.append(center)
         self.CirclesInfo.append(Info)
+    def CheckLine(self,p1,p2,p3):
+
+        return abs((self.Centers[p1-1][0]*(self.Centers[p2-1][1]-self.Centers[p3-1][1]) + self.Centers[p2-1][0]*(self.Centers[p3-1][1]-self.Centers[p1-1][1]) + self.Centers[p3-1][0]*(self.Centers[p1-1][1]-self.Centers[p2-1][1]))/2)
+
+    def perp(self, a ) :
+        b = empty_like(a)
+        b[0] = -a[1]
+        b[1] = a[0]
+        return b
+
+        # line segment a given by endpoints a1, a2
+        # line segment b given by endpoints b1, b2
+        # return 
+    def seg_intersect(self, a1,a2, b1,b2) :
+        da = array(a2) - array(a1) 
+        db = array(b2) - array(b1) 
+        dp = array(a1) - array(b1)
+        dap = self.perp(da)
+        denom = dot( dap, db)
+        num = dot( dap, dp )
+        return (num / denom.astype(float))*db + b1
+
+    def GetLinedPoints(self):
+        i=0
+        AreaMin = 0
+        Combination = [] 
+        while(i<10):
+            if(i==0):
+                AreaMin = self.CheckLine(1,2,3)
+                Combination = [1,2,3]
+            elif(i==1):
+                a = self.CheckLine(1,2,4)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [1,2,4]
+            elif(i==2):
+                a = self.CheckLine(1,2,5)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [1,2,5]
+            elif(i==3):
+                a = self.CheckLine(1,3,4)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [1,3,4]
+            elif(i==4):
+                a = self.CheckLine(1,3,5)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [1,3,5]
+            elif(i==5):
+                a = self.CheckLine(1,4,5)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [1,4,5]
+            elif(i==6):
+                a = self.CheckLine(2,3,4)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [2,3,4]
+            elif(i==7):
+                a = self.CheckLine(2,3,5)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [2,3,5]
+            elif(i==8):
+                a = self.CheckLine(2,4,5)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [2,4,5]
+            else:
+                a = self.CheckLine(3,4,5)
+                if(a  < AreaMin):
+                    AreaMin = a
+                    Combination = [3,4,5]
+            i=i+1
+        return Combination
+    def distance(self, Pi,Pj):
+        return sqrt( abs(Pi[0]-Pj[0])**2.0 + abs(Pi[1]-Pj[1])**2.0 )   
+
+    def GetOrderLinedPoints(self,linedpoints):
+        if(abs(self.distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
+            return [linedpoints[2],linedpoints[0]]
+        else:
+             return [linedpoints[0],linedpoints[2]]
+         
+
+    def GetoOrderPoints(self,LinedPoints):
+        PointsLeft = []
+        for element in [1,2,3,4,5]:
+            if element not in LinedPoints:
+                PointsLeft.append(element)
+        OrdenedLinedPoints = self.GetOrderLinedPoints(LinedPoints)
+        intersection = self.seg_intersect(self.Centers[PointsLeft[0] - 1],self.Centers[OrdenedLinedPoints[0] - 1],self.Centers[PointsLeft[1] - 1],self.Centers[OrdenedLinedPoints[1] - 1])
+        if (self.Centers[PointsLeft[0] - 1][0] < intersection[0] < self.Centers[OrdenedLinedPoints[0] - 1][0]):
+            return [PointsLeft[0], PointsLeft[1], OrdenedLinedPoints[0],OrdenedLinedPoints[1]]
+        else:
+            return [PointsLeft[1], PointsLeft[0], OrdenedLinedPoints[0],OrdenedLinedPoints[1]]
+            
+
+
