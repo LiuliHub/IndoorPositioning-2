@@ -33,15 +33,14 @@ class Frame(object):
     def save(self):
         i = img(self.OriginalMap,'RGB')
         image = Image.new(format(i),(get_w(i),get_h(i)))
-        image.putdata([pixel for F in matrix(i) for pixel in F])
+        image.putdata([pixel for F in i[1] for pixel in F])
         fn = "./Img/%i.jpg" % int(time.time())
         image.save(fn)
+
     def save_th(self):
         i = img(self.PixelMap,'RGB')
-        print len(self.PixelMap[0])
-        print len(self.PixelMap)	
-	image = Image.new(format(i),(get_w(i),get_h(i)))
-	image.putdata([pixel for F in matrix(i) for pixel in F])
+        image = Image.new(format(i),(get_w(i),get_h(i)))
+        image.putdata([pixel for F in i[1] for pixel in F])
         fn = "./Img/%i.jpg" % int(time.time())
         image.save(fn)
 
@@ -57,7 +56,7 @@ class Frame(object):
         return 0
 
     def WitchColorPixel(self, Pixel):
-        if((Pixel[0]<10)&(Pixel[1]<10)&(Pixel[2]<10)):
+        if((Pixel[0]<1)&(Pixel[1]<1)&(Pixel[2]<1)):
            #print "Black"
             return 1
         else:
@@ -67,7 +66,7 @@ class Frame(object):
 
     def GetPuzzleCircles(self):
         for x in range(len(self.PixelMap)):
-            if (range(10) in self.PixelMap[x]):
+            if ((0,0,0) in self.PixelMap[x]):
                 for y in range(len(self.PixelMap[x])):
                     #Check if it's black
                     if (self.WitchColorPixel(self.PixelMap[x][y]) == 1):

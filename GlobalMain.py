@@ -7,18 +7,18 @@ from calculate_coordinates import *
 import sys
 import time
 import numpy as np
-import picamera
+#import picamera
 '''
 picamera.PiResolution(2592, 1944)
 camera = picamera.PiCamera()
 camera.capture('img.jpg')
 '''
 frame = Frame()
-frame.ReadFrame("./test9950_O.jpg", 70)
+frame.ReadFrame("Img/test9950_R.jpg", 70)
 time1 = time.time()
 frame.GetPuzzleCircles()
 frame.DrawInImage(frame.Centers,5)
-#frame.save()
+frame.save()
 print("--- %s seconds ---" % (time.time() - time1))
 line = frame.GetLinedPoints()
 def distance(Pi,Pj):

@@ -13,7 +13,7 @@ else:
 	sys.exit(0)
 frame = Frame()
 frame.ReadFrame(frame_img, 70)
-#frame.save_th()
+frame.save_th()
 time1 = time.time()
 frame.GetPuzzleCircles()
 print("--- %s seconds ---" % (time.time() - time1))
