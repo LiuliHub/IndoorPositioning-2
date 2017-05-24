@@ -8,14 +8,17 @@ import sys
 import time
 import numpy as np
 import picamera
-
+'''
+picamera.PiResolution(2592, 1944)
 camera = picamera.PiCamera()
 camera.capture('img.jpg')
+'''
 frame = Frame()
-frame.ReadFrame("img.jpg", 70)
-#frame.save_th()
+frame.ReadFrame("./test9950_O.jpg", 70)
 time1 = time.time()
 frame.GetPuzzleCircles()
+frame.DrawInImage(frame.Centers,5)
+#frame.save()
 print("--- %s seconds ---" % (time.time() - time1))
 line = frame.GetLinedPoints()
 def distance(Pi,Pj):

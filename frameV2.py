@@ -38,8 +38,10 @@ class Frame(object):
         image.save(fn)
     def save_th(self):
         i = img(self.PixelMap,'RGB')
-        image = Image.new(format(i),(get_w(i),get_h(i)))
-        image.putdata([pixel for F in matrix(i) for pixel in F])
+        print len(self.PixelMap[0])
+        print len(self.PixelMap)	
+	image = Image.new(format(i),(get_w(i),get_h(i)))
+	image.putdata([pixel for F in matrix(i) for pixel in F])
         fn = "./Img/%i.jpg" % int(time.time())
         image.save(fn)
 
@@ -65,14 +67,15 @@ class Frame(object):
 
     def GetPuzzleCircles(self):
         for x in range(len(self.PixelMap)):
-            for y in range(len(self.PixelMap[x])):
+            if (range(10) in self.PixelMap[x]):
+                for y in range(len(self.PixelMap[x])):
                     #Check if it's black
-                if (self.WitchColorPixel(self.PixelMap[x][y]) == 1):
-                    #Check if pixel already in a circle existing
-                    if (self.NotIn([x,y])):
-                        self.SearchCircleInfo([x,y],[])
-                        if(len(self.Centers) == 5):
-                            return 0
+                    if (self.WitchColorPixel(self.PixelMap[x][y]) == 1):
+                        #Check if pixel already in a circle existing
+                        if (self.NotIn([x,y])):
+                            self.SearchCircleInfo([x,y],[])
+                            if(len(self.Centers) == 5):
+                                return 0
 
         return 0
 
