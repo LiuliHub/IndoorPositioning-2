@@ -5,7 +5,7 @@
 from img import *
 from PIL import Image, ImageFilter
 import time
-from numpy import *
+import numpy as np
 
 
 class Frame(object):
@@ -96,6 +96,7 @@ class Frame(object):
             if Info[3][1] > YLeft[1]:
                 Info[3] = YLeft
         center = [self.GetMiddlePoint(XTop,XDown)[0], self.GetMiddlePoint(YRight,YLeft)[1]]
+        print center
         if(self.IsValidCenter(center, Point)):
             self.CheckCenter(center, Info)
         else:
@@ -148,10 +149,14 @@ class Frame(object):
         return True
 
     def CheckCenter(self, center, Info):
+        margin = abs(round(((Info[1][0]-Info[0][0]) +(Info[2][1]-Info[3][1]))/4.0))
+        if(margin == 0):
+            margin = 1
+        print margin
         for i in range(len(self.Centers)):
             XDifference = abs(self.Centers[i][0] - center[0])
             YDifference = abs(self.Centers[i][1] - center[1])
-            if (((XDifference+YDifference)/2) < 10):
+            if (((XDifference+YDifference)/2) < margin):
                 self.Centers[i] = self.GetMiddlePoint(self.Centers[i], center)
                 if self.CirclesInfo[i][0][0] > Info[0][0]:
                     self.CirclesInfo[i][0] = Info[0]
@@ -169,7 +174,7 @@ class Frame(object):
         return abs((self.Centers[p1-1][0]*(self.Centers[p2-1][1]-self.Centers[p3-1][1]) + self.Centers[p2-1][0]*(self.Centers[p3-1][1]-self.Centers[p1-1][1]) + self.Centers[p3-1][0]*(self.Centers[p1-1][1]-self.Centers[p2-1][1]))/2)
 
     def perp(self, a ) :
-        b = empty_like(a)
+        b = np.empty_like(a)
         b[0] = -a[1]
         b[1] = a[0]
         return b
@@ -178,12 +183,12 @@ class Frame(object):
         # line segment b given by endpoints b1, b2
         # return 
     def seg_intersect(self, a1,a2, b1,b2) :
-        da = array(a2) - array(a1) 
-        db = array(b2) - array(b1) 
-        dp = array(a1) - array(b1)
+        da = np.array(a2) - np.array(a1) 
+        db = np.array(b2) - np.array(b1) 
+        dp = np.array(a1) - np.array(b1)
         dap = self.perp(da)
-        denom = dot( dap, db)
-        num = dot( dap, dp )
+        denom = np.dot( dap, db)
+        num = np.dot( dap, dp )
         return (num / denom.astype(float))*db + b1
 
     def GetLinedPoints(self):
@@ -242,7 +247,7 @@ class Frame(object):
             i=i+1
         return Combination
     def distance(self, Pi,Pj):
-        return sqrt( abs(Pi[0]-Pj[0])**2.0 + abs(Pi[1]-Pj[1])**2.0 )   
+        return np.sqrt( abs(Pi[0]-Pj[0])**2.0 + abs(Pi[1]-Pj[1])**2.0 )   
 
     def GetOrderLinedPoints(self,linedpoints):
         if(abs(self.distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
