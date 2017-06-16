@@ -96,7 +96,6 @@ class Frame(object):
             if Info[3][1] > YLeft[1]:
                 Info[3] = YLeft
         center = [self.GetMiddlePoint(XTop,XDown)[0], self.GetMiddlePoint(YRight,YLeft)[1]]
-        print center
         if(self.IsValidCenter(center, Point)):
             self.CheckCenter(center, Info)
         else:
@@ -152,7 +151,6 @@ class Frame(object):
         margin = abs(round(((Info[1][0]-Info[0][0]) +(Info[2][1]-Info[3][1]))/4.0))
         if(margin == 0):
             margin = 1
-        print margin
         for i in range(len(self.Centers)):
             XDifference = abs(self.Centers[i][0] - center[0])
             YDifference = abs(self.Centers[i][1] - center[1])
@@ -251,9 +249,9 @@ class Frame(object):
 
     def GetOrderLinedPoints(self,linedpoints):
         if(abs(self.distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
-            return [linedpoints[2],linedpoints[0]]
+            return [linedpoints[0],linedpoints[2]]
         else:
-             return [linedpoints[0],linedpoints[2]]
+             return [linedpoints[2],linedpoints[0]]
          
 
     def GetoOrderPoints(self,LinedPoints):
@@ -264,9 +262,9 @@ class Frame(object):
         OrdenedLinedPoints = self.GetOrderLinedPoints(LinedPoints)
         intersection = self.seg_intersect(self.Centers[PointsLeft[0] - 1],self.Centers[OrdenedLinedPoints[0] - 1],self.Centers[PointsLeft[1] - 1],self.Centers[OrdenedLinedPoints[1] - 1])
         if (self.Centers[PointsLeft[0] - 1][0] < intersection[0] < self.Centers[OrdenedLinedPoints[0] - 1][0]):
-            return [PointsLeft[0], PointsLeft[1], OrdenedLinedPoints[0],OrdenedLinedPoints[1]]
+            return [PointsLeft[1], OrdenedLinedPoints[0],OrdenedLinedPoints[1], PointsLeft[0]]
         else:
-            return [PointsLeft[1], PointsLeft[0], OrdenedLinedPoints[0],OrdenedLinedPoints[1]]
+            return [PointsLeft[0], OrdenedLinedPoints[0],OrdenedLinedPoints[1], PointsLeft[1]]
             
 
 

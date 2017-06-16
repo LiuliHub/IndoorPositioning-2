@@ -15,7 +15,7 @@ class Enviroment3d(object):
         self.Pixel2mmX = ( 1944 * 1.4*10**(-3))/self.HeightPixels
         self.Pixel2mmY = ( 2592 * 1.4*10**(-3))/self.WidthPixels        
         self.RotationMatrix = []
-        self.Focal = 3.60
+        self.Focal = 13
         self.s12 = s12
         self.s13 = s13
         self.s14 = s14
@@ -181,6 +181,52 @@ class Enviroment3d(object):
         elif (point == 4):
             return np.sqrt(self.x4()**2.0 + self.y4()**2.0 + self.Focal**2.0)
         
+    def R12(self):
+        return(np.sqrt(self.H12_2() + (self.Focal**2)*((1-self.C12())**2)))
 
+    def P1C(self):
+        factor = self.s12*(1/self.R12())
+        return factor*np.array([-self.x1(),-self.y1(), self.Focal]) + np.array([0,0,self.Focal]) 
+    def P2C(self):
+        factor = self.C12()*self.s12*(1/self.R12())
+        return factor*np.array([-self.x2(),-self.y2(), self.Focal]) + np.array([0,0,self.Focal]) 
+    def P3C(self):
+        factor = self.C13()*self.s12*(1/self.R12())
+        return factor*np.array([-self.x3(),-self.y3(), self.Focal]) + np.array([0,0,self.Focal]) 
+    def P4C(self):
+        factor = self.C14()*self.s12*(1/self.R12())
+        return factor*np.array([-self.x4(),-self.y4(), self.Focal]) + np.array([0,0,self.Focal]) 
 
-   
+    def Tmatrix(self,P1,P2,P3,P4):
+        T11 = (P4[1]*(self.P3C()[0]-self.P1C()[0])-P3[1]*(self.P4C()[0]-self.P1C()[0]) )/( P3[0]*P4[1]-P4[0]*P3[1])
+        T21 = (P4[1]*(self.P3C()[1]-self.P1C()[1])-P3[1]*(self.P4C()[1]-self.P1C()[1]) )/( P3[0]*P4[1]-P4[0]*P3[1])
+        T31 = (P4[1]*(self.P3C()[2]-self.P1C()[2])-P3[1]*(self.P4C()[2]-self.P1C()[2]) )/( P3[0]*P4[1]-P4[0]*P3[1])
+        T12 = (P3[0]*(self.P4C()[0]-self.P1C()[0])-P4[0]*(self.P3C()[0]-self.P1C()[0]) )/( P3[0]*P4[1]-P4[0]*P3[1])
+        T22 = (P3[0]*(self.P4C()[1]-self.P1C()[1])-P4[0]*(self.P3C()[1]-self.P1C()[1]) )/( P3[0]*P4[1]-P4[0]*P3[1])
+        T32 = (P3[0]*(self.P4C()[2]-self.P1C()[2])-P4[0]*(self.P3C()[2]-self.P1C()[2]) )/( P3[0]*P4[1]-P4[0]*P3[1])
+        T14 = self.P1C()[0]
+        T24 = self.P1C()[1]
+        T34 = self.P1C()[2]
+        T13 = T21*T32 - T22*T31
+        T23 = T12*T31 - T11*T32
+        T33 = T11*T22 - T12*T21
+        self.T = np.array([[T11,T12,T13,T14],[T21,T22,T23,T24],[T31,T32,T33,T34],[0,0,0,1]])
+    def GetPositonXYZ(self):
+        X0 = -self.T[0][0]*self.T[0][3] - self.T[1][0]*self.T[1][3] - self.T[2][0]*self.T[2][3]
+        Y0 = -self.T[0][1]*self.T[0][3] - self.T[1][1]*self.T[1][3] - self.T[2][1]*self.T[2][3]
+        Z0 = -self.T[0][2]*self.T[0][3] - self.T[1][2]*self.T[1][3] - self.T[2][2]*self.T[2][3]
+        if (self.T[2][2] != 1):
+            b0 = np.arccos(self.T[2][2])
+            a0 = np.arctan(-self.T[1][2]/self.T[0][2])
+            c0 = np.arctan(self.T[2][1]/self.T[2][0])
+            if(self.T[0][2]>0): 
+                a0= a0 + np.pi
+            if(self.T[2][0]<0):
+                b0 = b0 + np.pi
+        else:
+            b0 = 0
+            c0 = 0
+            a0 = np.arctan(self.T[0][1]/self.T[1][1])
+            if(self.T[1][1]>0):
+                 a0= a0 + np.pi
+        return [X0,Y0,Z0,np.rad2deg(a0),np.rad2deg(b0),np.rad2deg(c0)]
