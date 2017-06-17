@@ -12,7 +12,7 @@ camera = picamera.PiCamera()
 camera.resolution = (512,384)
 camera.rotation = 180
 def distance(Pi,Pj):
-            return np.sqrt( np.abs(Pi[0]-Pj[0])**2.0 + np.abs(Pi[1]-Pj[1])**2.0 + np.abs(Pi[2]-Pj[2])**2.0 )
+    return np.sqrt( np.abs(Pi[0]-Pj[0])**2.0 + np.abs(Pi[1]-Pj[1])**2.0 + np.abs(Pi[2]-Pj[2])**2.0 )
 P1 = [0,0,0]
 P4 = [0,100,0]
 P2 = [40,0,0]
