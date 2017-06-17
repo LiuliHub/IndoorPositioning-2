@@ -249,9 +249,9 @@ class Frame(object):
 
     def GetOrderLinedPoints(self,linedpoints):
         if(abs(self.distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
-            return [linedpoints[0],linedpoints[2]]
+            return [linedpoints[2],linedpoints[0]]
         else:
-             return [linedpoints[2],linedpoints[0]]
+             return [linedpoints[0],linedpoints[2]]
          
 
     def GetoOrderPoints(self,LinedPoints):
@@ -262,9 +262,9 @@ class Frame(object):
         OrdenedLinedPoints = self.GetOrderLinedPoints(LinedPoints)
         intersection = self.seg_intersect(self.Centers[PointsLeft[0] - 1],self.Centers[OrdenedLinedPoints[0] - 1],self.Centers[PointsLeft[1] - 1],self.Centers[OrdenedLinedPoints[1] - 1])
         if (self.Centers[PointsLeft[0] - 1][0] < intersection[0] < self.Centers[OrdenedLinedPoints[0] - 1][0]):
-            return [PointsLeft[1], OrdenedLinedPoints[0],OrdenedLinedPoints[1], PointsLeft[0]]
+            return [PointsLeft[0], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[1]]
         else:
-            return [PointsLeft[0], OrdenedLinedPoints[0],OrdenedLinedPoints[1], PointsLeft[1]]
+            return [PointsLeft[1], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[0]]
             
 
 

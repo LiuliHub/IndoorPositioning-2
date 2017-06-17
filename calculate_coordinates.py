@@ -15,7 +15,7 @@ class Enviroment3d(object):
         self.Pixel2mmX = ( 1944 * 1.4*10**(-3))/self.HeightPixels
         self.Pixel2mmY = ( 2592 * 1.4*10**(-3))/self.WidthPixels        
         self.RotationMatrix = []
-        self.Focal = 13
+        self.Focal = 3.6
         self.s12 = s12
         self.s13 = s13
         self.s14 = s14
@@ -180,7 +180,7 @@ class Enviroment3d(object):
             return np.sqrt(self.x3()**2.0 + self.y3()**2.0 + self.Focal**2.0)
         elif (point == 4):
             return np.sqrt(self.x4()**2.0 + self.y4()**2.0 + self.Focal**2.0)
-        
+
     def R12(self):
         return(np.sqrt(self.H12_2() + (self.Focal**2)*((1-self.C12())**2)))
 
@@ -230,3 +230,4 @@ class Enviroment3d(object):
             if(self.T[1][1]>0):
                  a0= a0 + np.pi
         return [X0,Y0,Z0,np.rad2deg(a0),np.rad2deg(b0),np.rad2deg(c0)]
+        
