@@ -3,7 +3,7 @@
 
 # Library imports
 import numpy as np
-
+from transformations import *
 
 class Enviroment3d(object):
 
@@ -212,6 +212,9 @@ class Enviroment3d(object):
         T33 = T11*T22 - T12*T21
         self.T = np.array([[T11,T12,T13,T14],[T21,T22,T23,T24],[T31,T32,T33,T34],[0,0,0,1]])
     def GetPositonXYZ(self):
+        scale, shear, angles, trans, persp = decompose_matrix(self.T)
+        return[trans[0],trans[1],trans[2],angles[0],angles[1],angles[2]]
+        '''
         X0 = -self.T[0][0]*self.T[0][3] - self.T[1][0]*self.T[1][3] - self.T[2][0]*self.T[2][3]
         Y0 = -self.T[0][1]*self.T[0][3] - self.T[1][1]*self.T[1][3] - self.T[2][1]*self.T[2][3]
         Z0 = -self.T[0][2]*self.T[0][3] - self.T[1][2]*self.T[1][3] - self.T[2][2]*self.T[2][3]
@@ -230,4 +233,4 @@ class Enviroment3d(object):
             if(self.T[1][1]>0):
                  a0= a0 + np.pi
         return [X0,Y0,Z0,np.rad2deg(a0),np.rad2deg(b0),np.rad2deg(c0)]
-        
+        '''

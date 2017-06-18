@@ -43,22 +43,15 @@ while(True):
     E.AddPointsTest(result)
     E.Tmatrix(result[0], result[1], result[2], result[3])
     XYZ = E.GetPositonXYZ()
-    print "-------- Distance found --------"
-    print "Distance 1: "+str(E.d1())
-    print "Distance 2: "+str(E.d2())+""
-    print "Distance 3: "+str(E.d3())
-    print "Distance 4: "+str(E.d4())
-    print "P1C: " +str(E.P1C())
-    print "P2C: " +str(E.P2C())
-    print "P3C: " +str(E.P3C())
-    print "P4C: " +str(E.P4C())
-    print E.T
-    '''
-    print "Xo:"+str(XYZ[0])+"	Yo:"+str(XYZ[1])+"	Zo:"+str(XYZ[2])
-    print "a:"+str(XYZ[3])+"	b:"+str(XYZ[4])+"	c:"+str(XYZ[5])
-    '''
-    print "**********************************"
-    
+    if(E.P1C()[2] == E.P2C()[2] == E.P3C()[2] == E.P4C()[2]):
+        print "-------- Distance found --------"
+        print "Distance 1: "+str(E.d1())
+        print "Distance 2: "+str(E.d2())+""
+        print "Distance 3: "+str(E.d3())
+        print "Distance 4: "+str(E.d4())
+        print "Xo:"+str(XYZ[0])+"	Yo:"+str(XYZ[1])+"	Zo:"+str(XYZ[2])
+        print "a:"+str(XYZ[3])+"	b:"+str(XYZ[4])+"	c:"+str(XYZ[5])
+        print "********************************"
     
 
     
