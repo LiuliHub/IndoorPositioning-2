@@ -17,27 +17,29 @@ P1 = [0,0,0]
 P4 = [0,100,0]
 P2 = [40,0,0]
 P3 = [40,100,0]
-
 s12 = distance(P1,P2)
 s13 = distance(P1,P3)
 s14 = distance(P1,P4)
 s23 = distance(P2,P3)
 s24 = distance(P2,P4)
 s34 = distance(P3,P4)
-
+    
 while(True):
     frame = Frame()
     E = Enviroment3d(s12,s13,s14,s23,s24,s34)
     time1 = time.time()
     camera.capture('img.jpg')
-    frame.ReadFrame("./img.jpg", 50)
+    frame.ReadFrame("./img.jpg", 40)
+    frame.save_th()
     frame.GetPuzzleCircles()
     time2 = time.time()
     line = frame.GetLinedPoints()
-    frame.save_th()
+    
     OrderPoints =  frame.GetoOrderPoints(line)
     Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], frame.Centers[OrderPoints[2]- 1], frame.Centers[OrderPoints[3]- 1]]
-    result = E.Pixel2Camera(Points)
+    Points_filtered=frame.CheckCenters(Points)
+    print Points_filtered
+    result = E.Pixel2Camera(Points_filtered)
     E.AddPointsTest(result)
     E.Tmatrix(result[0], result[1], result[2], result[3])
     XYZ = E.GetPositonXYZ()

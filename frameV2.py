@@ -266,5 +266,54 @@ class Frame(object):
         else:
             return [PointsLeft[1], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[0]]
             
-
-
+    def Distance(self,Pi,Pj):
+        return np.sqrt( np.abs(Pi[0]-Pj[0])**2.0 + np.abs(Pi[1]-Pj[1])**2.0)
+    def ParalelDistance(self,Po,Pi,Pj):
+        Po[0] = Po[0] + Pj[0] - Pi[0]
+        Po[1] = Po[1] + Pj[1] - Pi[1]
+        
+    def CheckCenters(self,P):
+        P1 = P[0]  
+        P2 = P[1] 
+        P3 = P[2] 
+        P4 = P[3] 
+        if(self.Distance(P1,P2)>self.Distance(P3,P4)):
+            print "Modificat X1"
+            P3 = self.ParalelDistance(P4,P1,P2)
+        elif(self.Distance(P1[0]-P2[0])<self.Distance(P3[0]-P4[0])):
+            print "Modificat X2"
+            P2 = self.ParalelDistance(P1,P4,P3)
+        if(self.Discance(P1[1],P4[1])>self.Distance(P2[1],P3[1])):
+            print "Modificat Y1"
+            P3 = self.ParalelDistance(P2,P1,P4)
+        elif(self.Distance(P1[1],P4[1])<self.Distance(P2[1],P3[1])):
+            print "Modificat Y2"
+            P4 = self.ParalelDistance(P1,P2,P3)
+            
+        '''
+        if(abs(P1[0]-P2[0])>abs(P3[0]-P4[0])):
+            print "Modificat X1"
+            if(P2[0]>P1[0]):
+                P3[0] = P4[0] + abs(P2[0]-P1[0])
+            else:
+                P4[0] = P3[0] + abs(P2[0]-P1[0])
+        elif(abs(P1[0]-P2[0])<abs(P3[0]-P4[0])):
+            print "Modificat X2"
+            if(P2[0]>P1[0]):
+                P2[0] = P1[0]+ abs(P3[0]-P4[0])
+            else:
+                P1[0] = P2[0]+ abs(P3[0]-P4[0])
+        if(abs(P1[1]-P4[1])>abs(P2[1]-P3[1])):
+            print "Modificat Y1"
+            if(P4[1]>P1[1]):
+                P3[1] = P2[1] + abs(P4[1]-P1[1])
+            else:
+                P2[1] = P3[1] + abs(P4[1]-P1[1])
+        elif(abs(P1[1]-P4[1])<abs(P2[1]-P3[1])):
+            print "Modificat Y2"
+            if(P4[1]>P1[1]):
+                P1[1] = P4[1] + abs(P3[1]-P2[1])
+            else:
+                P4[1] = P1[1] + abs(P3[1]-P2[1])
+        '''
+        return [P1,P2,P3,P4]
