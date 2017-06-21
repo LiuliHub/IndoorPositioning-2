@@ -267,27 +267,38 @@ class Frame(object):
             return [PointsLeft[1], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[0]]
             
     def ParalelDistance(self,Po,Pi,Pj):
-        Po[0] = Po[0] + Pj[0] - Pi[0]
-        Po[1] = Po[1] + Pj[1] - Pi[1]
-        return Po
+        P = [0,0]
+        P[0] = Po[0] + Pj[0] - Pi[0]
+        P[1] = Po[1] + Pj[1] - Pi[1]
+        print "Punt nou "+str(P)
+        return P
         
     def CheckCenters(self,P):
         P1 = P[0]  
         P2 = P[1] 
         P3 = P[2] 
         P4 = P[3] 
+        print self.Distance(P1,P2)
+        print self.Distance(P3,P4)
+        print self.Distance(P1,P4)
+        print self.Distance(P3,P2)
         
         if(self.Distance(P1,P2)>self.Distance(P3,P4)):
-            print "Modificat X1"
+            print "Modificat P3"
             P3 = self.ParalelDistance(P4,P1,P2)
         elif(self.Distance(P1,P2)<self.Distance(P3,P4)):
-            print "Modificat X2"
+            print "Modificat P2"
             P2 = self.ParalelDistance(P1,P4,P3)
+        print 
+        print self.Distance(P1,P2)
+        print self.Distance(P3,P4)
+        print self.Distance(P1,P4)
+        print self.Distance(P3,P2)
         if(self.Distance(P1,P4)>self.Distance(P2,P3)):
-            print "Modificat Y1"
+            print "Modificat P3"
             P3 = self.ParalelDistance(P2,P1,P4)
         elif(self.Distance(P1,P4)<self.Distance(P2,P3)):
-            print "Modificat Y2"
+            print "Modificat P4"
             P4 = self.ParalelDistance(P1,P2,P3)
             
         '''
