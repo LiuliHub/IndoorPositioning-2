@@ -29,8 +29,8 @@ while(True):
     E = Enviroment3d(s12,s13,s14,s23,s24,s34)
     time1 = time.time()
     camera.capture('img.jpg')
-    frame.ReadFrame("./img.jpg", 40)
-    frame.save_th()
+    frame.ReadFrame("./img.jpg", 60)
+    
     frame.GetPuzzleCircles()
     time2 = time.time()
     line = frame.GetLinedPoints()
@@ -38,6 +38,9 @@ while(True):
     OrderPoints =  frame.GetoOrderPoints(line)
     Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], frame.Centers[OrderPoints[2]- 1], frame.Centers[OrderPoints[3]- 1]]
     Points_filtered=frame.CheckCenters(Points)
+    #frame.DrawInImage(Points,10)
+    frame.save()
+    print Points
     print Points_filtered
     result = E.Pixel2Camera(Points_filtered)
     E.AddPointsTest(result)

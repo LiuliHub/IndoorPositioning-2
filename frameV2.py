@@ -244,11 +244,11 @@ class Frame(object):
                     Combination = [3,4,5]
             i=i+1
         return Combination
-    def distance(self, Pi,Pj):
+    def Distance(self, Pi,Pj):
         return np.sqrt( abs(Pi[0]-Pj[0])**2.0 + abs(Pi[1]-Pj[1])**2.0 )   
 
     def GetOrderLinedPoints(self,linedpoints):
-        if(abs(self.distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
+        if(abs(self.Distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.Distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
             return [linedpoints[2],linedpoints[0]]
         else:
              return [linedpoints[0],linedpoints[2]]
@@ -266,27 +266,27 @@ class Frame(object):
         else:
             return [PointsLeft[1], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[0]]
             
-    def Distance(self,Pi,Pj):
-        return np.sqrt( np.abs(Pi[0]-Pj[0])**2.0 + np.abs(Pi[1]-Pj[1])**2.0)
     def ParalelDistance(self,Po,Pi,Pj):
         Po[0] = Po[0] + Pj[0] - Pi[0]
         Po[1] = Po[1] + Pj[1] - Pi[1]
+        return Po
         
     def CheckCenters(self,P):
         P1 = P[0]  
         P2 = P[1] 
         P3 = P[2] 
         P4 = P[3] 
+        
         if(self.Distance(P1,P2)>self.Distance(P3,P4)):
             print "Modificat X1"
             P3 = self.ParalelDistance(P4,P1,P2)
-        elif(self.Distance(P1[0]-P2[0])<self.Distance(P3[0]-P4[0])):
+        elif(self.Distance(P1,P2)<self.Distance(P3,P4)):
             print "Modificat X2"
             P2 = self.ParalelDistance(P1,P4,P3)
-        if(self.Discance(P1[1],P4[1])>self.Distance(P2[1],P3[1])):
+        if(self.Distance(P1,P4)>self.Distance(P2,P3)):
             print "Modificat Y1"
             P3 = self.ParalelDistance(P2,P1,P4)
-        elif(self.Distance(P1[1],P4[1])<self.Distance(P2[1],P3[1])):
+        elif(self.Distance(P1,P4)<self.Distance(P2,P3)):
             print "Modificat Y2"
             P4 = self.ParalelDistance(P1,P2,P3)
             
