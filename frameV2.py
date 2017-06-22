@@ -246,8 +246,41 @@ class Frame(object):
         return Combination
     def Distance(self, Pi,Pj):
         return np.sqrt( abs(Pi[0]-Pj[0])**2.0 + abs(Pi[1]-Pj[1])**2.0 )   
+    def InTheMiddel(self,Im,I1,I2):
+        Pm = self.Centers[Im-1]
+        P1 = self.Centers[I1-1]
+        P2 = self.Centers[I2-1]
+        margin = 2
+        if(P1[0]>P2[0]):
+            if(P1[1]<P2[1]):
+                if (((P1[0]+margin)>Pm[0])&((P2[0]-margin)<Pm[0])&((P1[1]-margin)<Pm[1])&((P2[1]+margin)>Pm[1])):
+                    return True
+                else:
+                    return False
+            else:
+                if (((P1[0]+margin)>Pm[0])&((P2[0]-margin)<Pm[0])&((P2[1]-margin)<Pm[1])&((P1[1]+margin)>Pm[1])):
+                    return True
+                else:
+                    return False
+        else:
+            if(P1[1]<P2[1]):
+                if (((P2[0]+margin)>Pm[0])&((P1[0]-margin)<Pm[0])&((P1[1]-margin)<Pm[1])&((P2[1]+margin)>Pm[1])):
+                    return True
+                else:
+                    return False
+            else:
+                if (((P2[0]+margin)>Pm[0])&((P1[0]-margin)<Pm[0])&((P2[1]-margin)<Pm[1])&((P1[1]+margin)>Pm[1])):
+                    return True
+                else:
+                    return False
 
     def GetOrderLinedPoints(self,linedpoints):
+        if(self.InTheMiddel(linedpoints[1],linedpoints[0],linedpoints[2])):
+            linedpoints = [linedpoints[0], linedpoints[1], linedpoints[2]]
+        elif(self.InTheMiddel(linedpoints[0],linedpoints[1],linedpoints[2])):
+            linedpoints = [linedpoints[1], linedpoints[0], linedpoints[2]]
+        else:
+            linedpoints = [linedpoints[1], linedpoints[2], linedpoints[0]]            
         if(abs(self.Distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.Distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
             return [linedpoints[2],linedpoints[0]]
         else:
@@ -270,7 +303,6 @@ class Frame(object):
         P = [0,0]
         P[0] = Po[0] + Pj[0] - Pi[0]
         P[1] = Po[1] + Pj[1] - Pi[1]
-        print "Punt nou "+str(P)
         return P
         
     def CheckCenters(self,P):
@@ -279,16 +311,12 @@ class Frame(object):
         P3 = P[2] 
         P4 = P[3] 
         if(self.Distance(P1,P2)>self.Distance(P3,P4)):
-            print "Modificat P3"
             P3 = self.ParalelDistance(P4,P1,P2)
         elif(self.Distance(P1,P2)<self.Distance(P3,P4)):
-            print "Modificat P2"
             P2 = self.ParalelDistance(P1,P4,P3)
         if(self.Distance(P1,P4)>self.Distance(P2,P3)):
-            print "Modificat P3"
             P3 = self.ParalelDistance(P2,P1,P4)
         elif(self.Distance(P1,P4)<self.Distance(P2,P3)):
-            print "Modificat P4"
             P4 = self.ParalelDistance(P1,P2,P3)
             
         '''
