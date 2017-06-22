@@ -278,22 +278,12 @@ class Frame(object):
         P2 = P[1] 
         P3 = P[2] 
         P4 = P[3] 
-        print self.Distance(P1,P2)
-        print self.Distance(P3,P4)
-        print self.Distance(P1,P4)
-        print self.Distance(P3,P2)
-        
         if(self.Distance(P1,P2)>self.Distance(P3,P4)):
             print "Modificat P3"
             P3 = self.ParalelDistance(P4,P1,P2)
         elif(self.Distance(P1,P2)<self.Distance(P3,P4)):
             print "Modificat P2"
             P2 = self.ParalelDistance(P1,P4,P3)
-        print 
-        print self.Distance(P1,P2)
-        print self.Distance(P3,P4)
-        print self.Distance(P1,P4)
-        print self.Distance(P3,P2)
         if(self.Distance(P1,P4)>self.Distance(P2,P3)):
             print "Modificat P3"
             P3 = self.ParalelDistance(P2,P1,P4)
