@@ -6,6 +6,8 @@ from img import *
 from PIL import Image, ImageFilter
 import time
 import numpy as np
+from shapely.geometry import Point
+from shapely.geometry.polygon import Polygon
 
 
 class Frame(object):
@@ -56,7 +58,7 @@ class Frame(object):
         return 0
 
     def WitchColorPixel(self, Pixel):
-        if((Pixel[0]<1)&(Pixel[1]<1)&(Pixel[2]<1)):
+        if((Pixel[0]==0)&(Pixel[1]==0)&(Pixel[2]==0)):
            #print "Black"
             return 1
         else:
@@ -136,7 +138,7 @@ class Frame(object):
     def IsValidCenter(self, center, point):
         XDifference = abs(point[0] - center[0])
         YDifference = abs(point[1] - center[1])
-        if (((XDifference+YDifference)/2) < 2):
+        if (((XDifference+YDifference)/2) == 0):
             return True
         return False
     def NotIn(self, Point):
@@ -167,6 +169,7 @@ class Frame(object):
                 return 0
         self.Centers.append(center)
         self.CirclesInfo.append(Info)
+        
     def CheckLine(self,p1,p2,p3):
 
         return abs((self.Centers[p1-1][0]*(self.Centers[p2-1][1]-self.Centers[p3-1][1]) + self.Centers[p2-1][0]*(self.Centers[p3-1][1]-self.Centers[p1-1][1]) + self.Centers[p3-1][0]*(self.Centers[p1-1][1]-self.Centers[p2-1][1]))/2)
@@ -293,11 +296,13 @@ class Frame(object):
             if element not in LinedPoints:
                 PointsLeft.append(element)
         OrdenedLinedPoints = self.GetOrderLinedPoints(LinedPoints)
-        intersection = self.seg_intersect(self.Centers[PointsLeft[0] - 1],self.Centers[OrdenedLinedPoints[0] - 1],self.Centers[PointsLeft[1] - 1],self.Centers[OrdenedLinedPoints[1] - 1])
-        if (self.Centers[PointsLeft[0] - 1][0] < intersection[0] < self.Centers[OrdenedLinedPoints[0] - 1][0]):
-            return [PointsLeft[0], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[1]]
-        else:
+        intersection = self.seg_intersect(self.Centers[PointsLeft[1] - 1],self.Centers[OrdenedLinedPoints[0] - 1],self.Centers[PointsLeft[0] - 1],self.Centers[OrdenedLinedPoints[1] - 1])
+        IntersectionPoint = Point(intersection[0],intersection[1])
+        ObjectPoints = Polygon([(self.Centers[PointsLeft[1] - 1][0], self.Centers[PointsLeft[1] - 1][1]),(self.Centers[PointsLeft[0] - 1][0],self.Centers[PointsLeft[0] - 1][1]), (self.Centers[OrdenedLinedPoints[0] - 1][0],self.Centers[OrdenedLinedPoints[0] - 1][1]), (self.Centers[OrdenedLinedPoints[1] - 1][0],self.Centers[OrdenedLinedPoints[1] - 1][1])])
+        if (ObjectPoints.contains(IntersectionPoint)):
             return [PointsLeft[1], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[0]]
+        else:
+            return [PointsLeft[0], OrdenedLinedPoints[1],OrdenedLinedPoints[0], PointsLeft[1]]
             
     def ParalelDistance(self,Po,Pi,Pj):
         P = [0,0]
@@ -318,31 +323,4 @@ class Frame(object):
             P3 = self.ParalelDistance(P2,P1,P4)
         elif(self.Distance(P1,P4)<self.Distance(P2,P3)):
             P4 = self.ParalelDistance(P1,P2,P3)
-            
-        '''
-        if(abs(P1[0]-P2[0])>abs(P3[0]-P4[0])):
-            print "Modificat X1"
-            if(P2[0]>P1[0]):
-                P3[0] = P4[0] + abs(P2[0]-P1[0])
-            else:
-                P4[0] = P3[0] + abs(P2[0]-P1[0])
-        elif(abs(P1[0]-P2[0])<abs(P3[0]-P4[0])):
-            print "Modificat X2"
-            if(P2[0]>P1[0]):
-                P2[0] = P1[0]+ abs(P3[0]-P4[0])
-            else:
-                P1[0] = P2[0]+ abs(P3[0]-P4[0])
-        if(abs(P1[1]-P4[1])>abs(P2[1]-P3[1])):
-            print "Modificat Y1"
-            if(P4[1]>P1[1]):
-                P3[1] = P2[1] + abs(P4[1]-P1[1])
-            else:
-                P2[1] = P3[1] + abs(P4[1]-P1[1])
-        elif(abs(P1[1]-P4[1])<abs(P2[1]-P3[1])):
-            print "Modificat Y2"
-            if(P4[1]>P1[1]):
-                P1[1] = P4[1] + abs(P3[1]-P2[1])
-            else:
-                P4[1] = P1[1] + abs(P3[1]-P2[1])
-        '''
         return [P1,P2,P3,P4]
