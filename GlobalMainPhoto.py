@@ -42,7 +42,7 @@ Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], fr
 print (frame.Centers)
 print(Points)
 Points_filtered=frame.CheckCenters(Points)
-frame.DrawInImage(Points_filtered,5)
+frame.DrawInImage(Points_filtered,2)
 frame.save()
 print(Points_filtered)
 result = E.Pixel2Camera(Points_filtered)

@@ -15,7 +15,7 @@ The focal length of the camera is f
 f=1
 
 #Camera coordinates with respect to the world
-c=np.array([[1],[1],[10]])
+c=np.array([[10],[10],[100]])
 
 #Point coordinates
 #v=np.array([[0],[0],[0]])

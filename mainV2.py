@@ -17,11 +17,9 @@ frame.ReadFrame(frame_img, 70)
 time1 = time.time()
 frame.GetPuzzleCircles()
 print("--- %s seconds ---" % (time.time() - time1))
-'''
 for info in frame.CirclesInfo:
-   frame.DrawInImage(info,10)  
-   '''
-frame.DrawInImage(frame.Centers,5)
+   frame.DrawInImage(info,5)  
+frame.DrawInImage(frame.Centers,2)
 frame.save()
 print "Hi han "+str(frame.Centers)
 print "Hi han "+str(len(frame.CirclesInfo))
