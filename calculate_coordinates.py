@@ -27,7 +27,7 @@ class Enviroment3d(object):
         self.d2
         self.d3
         self.d4
-        self.T
+        #self.T
 
     #Functions to test the algorith with theoretical points
     def GetRotationMatrix(self,x,y,z):

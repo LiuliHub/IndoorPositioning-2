@@ -3,8 +3,8 @@ from transformations import *
 from calculate_coordinates import *
 
 #Camera coordinates with respect to the world
-c=np.array([[50],[50],[800]])
-rot = np.array([180,0,90])
+c=np.array([[50],[50],[400]])
+rot = np.array([175,0,75])
 
 
 
@@ -62,12 +62,17 @@ s23 = distance(P2,P3)
 s24 = distance(P2,P4)
 s34 = distance(P3,P4)
 
+
+
 #Pixel diference
 PX = ( 1944 * 1.4*10**(-3))/384
 PY = ( 2592 * 1.4*10**(-3))/512
 
-P1f=[qc[0][0]+PX, qc[1][0]]
-P2f=[qc[0][1], qc[1][1]]
+xmin=384/2*PX
+ymax=512/2*PX
+
+P1f=[qc[0][0], qc[1][0]]
+P2f=[qc[0][1]+1*PX, qc[1][1]]
 P3f=[qc[0][2], qc[1][2]]
 P4f=[qc[0][3], qc[1][3]]
 
