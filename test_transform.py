@@ -72,7 +72,7 @@ xmin=384/2*PX
 ymax=512/2*PX
 
 P1f=[qc[0][0], qc[1][0]]
-P2f=[qc[0][1]+1*PX, qc[1][1]]
+P2f=[qc[0][1], qc[1][1]]
 P3f=[qc[0][2], qc[1][2]]
 P4f=[qc[0][3], qc[1][3]]
 
@@ -89,9 +89,9 @@ print str([qc[0][2], qc[1][2]]) +' to '+ str([qc[0][2], qc[1][2]])
 print str([qc[0][3], qc[1][3]]) +' to '+ str([qc[0][3], qc[1][3]])
 
 print "**************************"
-print "X0 = "+str(np.matmul(o.T,np.linalg.inv(TT))[0][0])
-print "Y0 = "+str(np.matmul(o.T,np.linalg.inv(TT))[0][1])
-print "Z0 = "+str(np.matmul(o.T,np.linalg.inv(TT))[0][2])
+print "X0 = "+str(result[0])
+print "Y0 = "+str(result[1])
+print "Z0 = "+str(result[2])
 print "a = "+str(np.rad2deg(result[3]))
 print "b = "+str(np.rad2deg(result[4]))
 print "c = "+str(np.rad2deg(result[5]))
