@@ -253,7 +253,7 @@ class Frame(object):
         Pm = self.Centers[Im-1]
         P1 = self.Centers[I1-1]
         P2 = self.Centers[I2-1]
-        margin = 4
+        margin = 2
         if(P1[0]>P2[0]):
             if(P1[1]<P2[1]):
                 if (((P1[0]+margin)>Pm[0])&((P2[0]-margin)<Pm[0])&((P1[1]-margin)<Pm[1])&((P2[1]+margin)>Pm[1])):
