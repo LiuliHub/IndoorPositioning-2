@@ -226,6 +226,7 @@ class Enviroment3d(object):
         self.T = np.array([[T11,T12,T13,T14],[T21,T22,T23,T24],[T31,T32,T33,T34],[0,0,0,1]])
     def GetPositonXYZ(self):
         scale, shear, angles, trans, persp = decompose_matrix(self.T)
+        return[trans[0],trans[1],trans[2],angles[0],angles[1],angles[2]]
         TT = self.T.T
         o = np.array([[0],[0],[0],[1]])
         trans = np.matmul(o.T,np.linalg.inv(TT))

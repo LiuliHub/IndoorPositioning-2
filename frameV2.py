@@ -138,7 +138,7 @@ class Frame(object):
     def IsValidCenter(self, center, point):
         XDifference = abs(point[0] - center[0])
         YDifference = abs(point[1] - center[1])
-        if (((XDifference+YDifference)/2) == 0):
+        if (((XDifference+YDifference)/2) < 2):
             return True
         return False
     def NotIn(self, Point):
@@ -253,7 +253,7 @@ class Frame(object):
         Pm = self.Centers[Im-1]
         P1 = self.Centers[I1-1]
         P2 = self.Centers[I2-1]
-        margin = 2
+        margin = 4
         if(P1[0]>P2[0]):
             if(P1[1]<P2[1]):
                 if (((P1[0]+margin)>Pm[0])&((P2[0]-margin)<Pm[0])&((P1[1]-margin)<Pm[1])&((P2[1]+margin)>Pm[1])):
@@ -283,7 +283,8 @@ class Frame(object):
         elif(self.InTheMiddel(linedpoints[0],linedpoints[1],linedpoints[2])):
             linedpoints = [linedpoints[1], linedpoints[0], linedpoints[2]]
         else:
-            linedpoints = [linedpoints[1], linedpoints[2], linedpoints[0]]            
+            linedpoints = [linedpoints[1], linedpoints[2], linedpoints[0]]
+        print linedpoints
         if(abs(self.Distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.Distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
             return [linedpoints[2],linedpoints[0]]
         else:
