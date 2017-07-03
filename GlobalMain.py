@@ -42,7 +42,7 @@ while(True):
     frame.save()
     print Points
     print Points_filtered
-    result = E.Pixel2Camera(Points_filtered)
+    result = E.Pixel2Camera(Points)
     E.AddPointsTest(result)
     E.Tmatrix(P1,P2,P3,P4)
     XYZ = E.GetPositonXYZ()
@@ -58,7 +58,7 @@ while(True):
     print "a = "+str(np.rad2deg(XYZ[3]))
     print "b = "+str(np.rad2deg(XYZ[4]))
     print "c = "+str(np.rad2deg(XYZ[5]))
-
+    
     print "********************************"
 
 

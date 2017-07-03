@@ -183,7 +183,7 @@ class Enviroment3d(object):
 
     def R12(self):
         return(np.sqrt(self.H12_2() + (self.Focal**2)*((1-self.C12())**2)))
-    '''
+    '''    
     def P1C(self):
         factor = self.s12*(1/self.R12())
         return factor*np.array([-self.x1(),-self.y1(), self.Focal]) + np.array([0,0,self.Focal]) 
@@ -209,7 +209,7 @@ class Enviroment3d(object):
     def P4C(self):
         factor = self.C14()*self.s12*(1/self.R12())
         return factor*np.array([self.x4(),self.y4(), self.Focal]) 
-
+    
     def Tmatrix(self,P1,P2,P3,P4):
         T11 = (P4[1]*(self.P3C()[0]-self.P1C()[0])-P3[1]*(self.P4C()[0]-self.P1C()[0]) )/( P3[0]*P4[1]-P4[0]*P3[1])
         T21 = (P4[1]*(self.P3C()[1]-self.P1C()[1])-P3[1]*(self.P4C()[1]-self.P1C()[1]) )/( P3[0]*P4[1]-P4[0]*P3[1])
