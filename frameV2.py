@@ -43,7 +43,7 @@ class Frame(object):
         i = img(self.PixelMap,'RGB')
         image = Image.new(format(i),(get_w(i),get_h(i)))
         image.putdata([pixel for F in i[1] for pixel in F])
-        fn = "./Img/%i.jpg" % int(time.time())
+        fn = "./Img/%i_th.jpg" % int(time.time())
         image.save(fn)
 
     def DrawInImage(self,ArrayPixels,thickness):
@@ -253,29 +253,22 @@ class Frame(object):
         Pm = self.Centers[Im-1]
         P1 = self.Centers[I1-1]
         P2 = self.Centers[I2-1]
+        point = Point(Pm[0],Pm[1]) 
         margin = 2
         if(P1[0]>P2[0]):
             if(P1[1]<P2[1]):
-                if (((P1[0]+margin)>Pm[0])&((P2[0]-margin)<Pm[0])&((P1[1]-margin)<Pm[1])&((P2[1]+margin)>Pm[1])):
-                    return True
-                else:
-                    return False
+                polygon = Polygon([(P1[0]+margin, P1[1]), (P1[0], P1[1]-margin),(P2[0]-margin, P2[1]), (P2[0], P2[1]+margin)])
+                return polygon.contains(point)
             else:
-                if (((P1[0]+margin)>Pm[0])&((P2[0]-margin)<Pm[0])&((P2[1]-margin)<Pm[1])&((P1[1]+margin)>Pm[1])):
-                    return True
-                else:
-                    return False
+                polygon = Polygon([(P1[0]+margin, P1[1]), (P1[0], P1[1]+margin),(P2[0]-margin, P2[1]), (P2[0], P2[1]-margin)])
+                return polygon.contains(point)
         else:
             if(P1[1]<P2[1]):
-                if (((P2[0]+margin)>Pm[0])&((P1[0]-margin)<Pm[0])&((P1[1]-margin)<Pm[1])&((P2[1]+margin)>Pm[1])):
-                    return True
-                else:
-                    return False
+                polygon = Polygon([(P1[0]-margin, P1[1]), (P1[0], P1[1]-margin),(P2[0]+margin, P2[1]), (P2[0], P2[1]+margin)])
+                return polygon.contains(point)
             else:
-                if (((P2[0]+margin)>Pm[0])&((P1[0]-margin)<Pm[0])&((P2[1]-margin)<Pm[1])&((P1[1]+margin)>Pm[1])):
-                    return True
-                else:
-                    return False
+                polygon = Polygon([(P1[0]-margin, P1[1]), (P1[0], P1[1]+margin),(P2[0]+margin, P2[1]), (P2[0], P2[1]-margin)])
+                return polygon.contains(point)
 
     def GetOrderLinedPoints(self,linedpoints):
         if(self.InTheMiddel(linedpoints[1],linedpoints[0],linedpoints[2])):
@@ -284,7 +277,6 @@ class Frame(object):
             linedpoints = [linedpoints[1], linedpoints[0], linedpoints[2]]
         else:
             linedpoints = [linedpoints[1], linedpoints[2], linedpoints[0]]
-        print linedpoints
         if(abs(self.Distance(self.Centers[linedpoints[0]-1],self.Centers[linedpoints[1]-1])) < abs(self.Distance(self.Centers[linedpoints[2]-1],self.Centers[linedpoints[1]-1]))):
             return [linedpoints[2],linedpoints[0]]
         else:

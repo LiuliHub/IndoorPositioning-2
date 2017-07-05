@@ -28,8 +28,10 @@ s24 = distance(P2,P4)
 s34 = distance(P3,P4)
 
 frame = Frame()
-frame.ReadFrame(frame_img, 70)
+frame.ReadFrame(frame_img, 85)
 time1 = time.time()
+frame.save_th()
+
 frame.GetPuzzleCircles()
 
 print("--- %s seconds ---" % (time.time() - time1))
@@ -42,7 +44,7 @@ Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], fr
 print (frame.Centers)
 print(Points)
 Points_filtered=frame.CheckCenters(Points)
-frame.DrawInImage(Points_filtered,2)
+frame.DrawInImage(frame.Centers,5)
 frame.save()
 print(Points_filtered)
 result = E.Pixel2Camera(Points_filtered)
