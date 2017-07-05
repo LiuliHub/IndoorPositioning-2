@@ -58,3 +58,5 @@ while(True):
             print "Distance 2: "+str(E.d2())+""
             print "Distance 3: "+str(E.d3())
             print "Distance 4: "+str(E.d4())
+        else:
+            print "NO GOOD RECOGNITION"

@@ -4,7 +4,7 @@ from calculate_coordinates import *
 from frameV2 import *
 
 #Camera coordinates with respect to the world
-c=np.array([[50],[100],[1000]])
+c=np.array([[50],[100],[2000]])
 rot = np.array([180,0,-0])
 
 
