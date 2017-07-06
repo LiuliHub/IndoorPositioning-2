@@ -4,8 +4,8 @@ from calculate_coordinates import *
 from frameV2 import *
 
 #Camera coordinates with respect to the world
-c=np.array([[50],[100],[2000]])
-rot = np.array([180,0,-0])
+c=np.array([[50],[50],[900]])
+rot = np.array([180,0,90])
 
 
 
@@ -78,8 +78,8 @@ P3f=[qc[0][2], qc[1][2]]
 P4f=[qc[0][3], qc[1][3]]
 
 P1fd=[qc[0][0], qc[1][0]]
-P2fd=[qc[0][1], qc[1][1]]
-P3fd=[qc[0][2]+ PX, qc[1][2]]
+P2fd=[qc[0][1]+PX, qc[1][1]]
+P3fd=[qc[0][2], qc[1][2]]
 P4fd=[qc[0][3], qc[1][3]]
 
 D1 = Enviroment3d(s12,s13,s14,s23,s24,s34)

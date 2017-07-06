@@ -28,35 +28,35 @@ while(True):
     E = Enviroment3d(s12,s13,s14,s23,s24,s34)
     camera.capture('img.jpg')
     frame.ReadFrame("./img.jpg", 70)
-    
-    frame.GetPuzzleCircles()
-    line = frame.GetLinedPoints()
-    OrderPoints =  frame.GetoOrderPoints(line)
-    Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], frame.Centers[OrderPoints[2]- 1], frame.Centers[OrderPoints[3]- 1]]
-    result = E.Pixel2Camera(Points)
-    E.AddPointsTest(result)
-    E.Tmatrix(P1,P2,P3,P4)
-    XYZ = E.GetPositonXYZ()
-    if (E.IsAGoodMesurement()):
-        print "-------- Distance found --------"
-        print "Distance 1: "+str(E.d1())
-        print "Distance 2: "+str(E.d2())+""
-        print "Distance 3: "+str(E.d3())
-        print "Distance 4: "+str(E.d4())
-        print "X0 = "+str(XYZ[0])
-        print "Y0 = "+str(XYZ[1])
-        print "Z0 = "+str(XYZ[2])
-        print "a = "+str(np.rad2deg(XYZ[3]))
-        print "b = "+str(np.rad2deg(XYZ[4]))
-        print "c = "+str(np.rad2deg(XYZ[5]))
-        
-        print "********************************"
-    else:
-        if (E.AblePrintDistance()):
+    try:
+        frame.GetPuzzleCircles()
+        line = frame.GetLinedPoints()
+        OrderPoints =  frame.GetoOrderPoints(line)
+        Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], frame.Centers[OrderPoints[2]- 1], frame.Centers[OrderPoints[3]- 1]]
+        result = E.Pixel2Camera(Points)
+        E.AddPointsTest(result)
+        E.Tmatrix(P1,P2,P3,P4)
+        XYZ = E.GetPositonXYZ()
+        if (E.IsAGoodMesurement()):
             print "-------- Distance found --------"
             print "Distance 1: "+str(E.d1())
             print "Distance 2: "+str(E.d2())+""
             print "Distance 3: "+str(E.d3())
             print "Distance 4: "+str(E.d4())
+            print "X0 = "+str(XYZ[0])
+            print "Y0 = "+str(XYZ[1])
+            print "Z0 = "+str(XYZ[2])
+            print "a = "+str(np.rad2deg(XYZ[3]))
+            print "b = "+str(np.rad2deg(XYZ[4]))
+            print "c = "+str(np.rad2deg(XYZ[5]))
+            
+            print "********************************"
         else:
-            print "NO GOOD RECOGNITION"
+            if (E.AblePrintDistance()):
+                print "-------- Distance found --------"
+                print "Distance 1: "+str(E.d1())
+                print "Distance 2: "+str(E.d2())+""
+                print "Distance 3: "+str(E.d3())
+                print "Distance 4: "+str(E.d4())
+            else:
+                print "NOT GOOD OBJECT RECOGNITION"

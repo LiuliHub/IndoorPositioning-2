@@ -522,7 +522,8 @@ class Enviroment3d(object):
         factor3 = round(self.s14*(1/self.R14())*self.Fi(1))
         factor4 = round(self.s23/(self.R23()*self.C12())*self.Fi(1))
         factor5 = round(self.s24/(self.R24()*self.C12())*self.Fi(1))
-        factor6 = round(self.s34/(self.R34()*self.C13())*self.Fi(1))       
+        factor6 = round(self.s34/(self.R34()*self.C13())*self.Fi(1))
+        print [factor1,factor2,factor3, factor4, factor5, factor6]       
         return (factor1 == factor2 == factor3 == factor4 == factor5 == factor6)
     
     def AblePrintDistance(self):
