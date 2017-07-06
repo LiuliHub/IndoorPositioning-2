@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from img import *
-from frameV2 import *
+from src.frameV2 import *
 import sys
 import time
 

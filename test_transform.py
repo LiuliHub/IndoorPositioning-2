@@ -1,7 +1,8 @@
+
 import numpy as np
-from transformations import *
-from calculate_coordinates import *
-from frameV2 import *
+from src.transformations import *
+from src.calculate_coordinates import *
+from src.frameV2 import *
 
 #Camera coordinates with respect to the world
 c=np.array([[50],[50],[900]])

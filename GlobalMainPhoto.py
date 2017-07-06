@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from img import *
-from frameV2 import *
-from calculate_coordinates import *
+from src.frameV2 import *
+from src.calculate_coordinates import *
 import sys
 import time
 import numpy as np

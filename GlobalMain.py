@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-                                                                                
 
 from img import *
-from frameV2 import *
-from calculate_coordinates import *
+from src.frameV2 import *
+from src.calculate_coordinates import *
 import sys
 import time
 import numpy as np
@@ -29,37 +29,39 @@ while(True):
     time1 = time.time()
     camera.capture('img.jpg')
     frame.ReadFrame("./img.jpg", 70)
-    
     frame.GetPuzzleCircles()
-    
-    time2 = time.time()
-    print frame.Centers
-    line = frame.GetLinedPoints()
-    OrderPoints =  frame.GetoOrderPoints(line)
-    Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], frame.Centers[OrderPoints[2]- 1], frame.Centers[OrderPoints[3]- 1]]
-    Points_filtered=frame.CheckCenters(Points)
-    #frame.DrawInImage(Points_filtered,5)
-    frame.save()
-    print Points
-    print Points_filtered
-    result = E.Pixel2Camera(Points)
-    E.AddPointsTest(result)
-    E.Tmatrix(P1,P2,P3,P4)
-    XYZ = E.GetPositonXYZ()
-    print("--- %s seconds ---" % (time2 - time1))
-    print "-------- Distance found --------"
-    print "Distance 1: "+str(E.d1())
-    print "Distance 2: "+str(E.d2())+""
-    print "Distance 3: "+str(E.d3())
-    print "Distance 4: "+str(E.d4())
-    print "X0 = "+str(XYZ[0])
-    print "Y0 = "+str(XYZ[1])
-    print "Z0 = "+str(XYZ[2])
-    print "a = "+str(np.rad2deg(XYZ[3]))
-    print "b = "+str(np.rad2deg(XYZ[4]))
-    print "c = "+str(np.rad2deg(XYZ[5]))
-    
-    print "********************************"
-
-
-    
+    if (len(frame.Centers) == 5):
+        line = frame.GetLinedPoints()
+        OrderPoints =  frame.GetoOrderPoints(line)
+        Points =[frame.Centers[OrderPoints[0] - 1], frame.Centers[OrderPoints[1]- 1], frame.Centers[OrderPoints[2]- 1], frame.Centers[OrderPoints[3]- 1]]
+        result = E.Pixel2Camera(Points)
+        E.AddPointsTest(result)
+        E.Tmatrix(P1,P2,P3,P4)
+        XYZ = E.GetPositonXYZ()
+        time2 = time.time()
+        print ("--- %s seconds ---" % (time2 - time1))
+        if (E.IsAGoodMesurement()):
+            print "-------- Distance found --------"
+            print "Distance 1: "+str(E.d1())
+            print "Distance 2: "+str(E.d2())+""
+            print "Distance 3: "+str(E.d3())
+            print "Distance 4: "+str(E.d4())
+            print "X0 = "+str(XYZ[0])
+            print "Y0 = "+str(XYZ[1])
+            print "Z0 = "+str(XYZ[2])
+            print "a = "+str(np.rad2deg(XYZ[3]))
+            print "b = "+str(np.rad2deg(XYZ[4]))
+            print "c = "+str(np.rad2deg(XYZ[5]))
+            
+            print "********************************"
+        else:
+            if (E.AblePrintDistance()):
+                print "-------- Distance found --------"
+                print "Distance 1: "+str(E.d1)
+                print "Distance 2: "+str(E.d2)+""
+                print "Distance 3: "+str(E.d3)
+                print "Distance 4: "+str(E.d4)
+            else:
+                print "NOT GOOD OBJECT RECOGNITION"
+    else:
+        print" NO OBJECT RECOGNITION"

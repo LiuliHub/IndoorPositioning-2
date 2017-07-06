@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from calculate_coordinates import *
+from src.calculate_coordinates import *
 import time
 import numpy as np
 

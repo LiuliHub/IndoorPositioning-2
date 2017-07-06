@@ -1,4 +1,4 @@
-from calculate_coordinates import *
+from src.calculate_coordinates import *
 import time
 
 s12 = 93.6
