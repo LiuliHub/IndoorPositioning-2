@@ -60,3 +60,5 @@ while(True):
                 print "Distance 4: "+str(E.d4())
             else:
                 print "NOT GOOD OBJECT RECOGNITION"
+    except:
+        print" NO OBJECT RECOGNITION"
